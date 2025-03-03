@@ -11,7 +11,7 @@ type SearchResult struct {
 	UserID uint64
 }
 
-func (s *Search) Search(
+func Search(
 	Language string,
 	YourStart int,
 	YourEnd int,
@@ -21,6 +21,11 @@ func (s *Search) Search(
 	interests ...string,
 ) (*SearchResult, error) {
 
+	// Check if core is initialized
+	if core == nil || core.sql == nil {
+		return nil, ErrNotInitialize
+	}
+
 	// Use strings.Builder for constructing the query
 	var queryBuilder strings.Builder
 
@@ -28,8 +33,11 @@ func (s *Search) Search(
       language = ?
       AND ? BETWEEN your_start AND your_end
       AND my_age BETWEEN ? AND ?
-      AND (your_sex = ? OR your_sex = 2)
-      AND (my_sex = ? OR ? = 2)`)
+      AND (your_sex = ? OR your_sex = 2)`)
+
+	if MySex != 2 {
+		queryBuilder.WriteString("AND (my_sex = ?)")
+	}
 
 	// Populate arguments for the SQL query
 	args := []any{
@@ -47,7 +55,7 @@ func (s *Search) Search(
 		queryBuilder.WriteString(" AND (")
 		first := true
 		for _, interest := range interests {
-			if s.interests[interest] { // Validate against the map
+			if core.interests[interest] { // Validate against the map
 				if !first {
 					queryBuilder.WriteString(" OR ")
 				}
@@ -62,7 +70,7 @@ func (s *Search) Search(
 	queryBuilder.WriteString(" ORDER BY priority DESC LIMIT 1")
 
 	// Use the passed context to ensure consistent timeout management
-	return query(s, Params{
+	return query(Params{
 		Query: queryBuilder.String(),
 		Args:  args,
 	}, func(rows *sql.Rows) (*SearchResult, error) {

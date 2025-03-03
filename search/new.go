@@ -3,18 +3,25 @@ package search
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"os"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
-type Search struct {
+var (
+	core *SearchSystem
+
+	ErrNotInitialize = errors.New("the search system has not been initialized")
+)
+
+type SearchSystem struct {
 	sql       *sql.DB
 	interests map[string]bool
 }
 
-func New(config ...Config) (*Search, error) {
+func New(config ...Config) error {
 
 	cfg := configDefault(config...)
 
@@ -23,24 +30,24 @@ func New(config ...Config) (*Search, error) {
 	if cfg.Reset && cfg.LocalFile != "file::memory:" {
 		err := os.Remove(cfg.LocalFile)
 		if err != nil && !os.IsNotExist(err) {
-			return nil, err // Return an error if it's not "file does not exist" error
+			return err // Return an error if it's not "file does not exist" error
 		}
 	}
 
 	// Initialize SQLite database connection
 	db, err := sql.Open("sqlite3", cfg.LocalFile)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	// Ping the database to ensure the connection is valid.
 	err = db.Ping()
 	if err != nil {
-		return nil, err // Terminate the program if the connection is invalid.
+		return err // Terminate the program if the connection is invalid.
 	}
 
 	if err := create(db, cfg.Interests); err != nil {
-		return nil, err
+		return err
 	}
 
 	interestsMap := make(map[string]bool, len(cfg.Interests))
@@ -48,12 +55,12 @@ func New(config ...Config) (*Search, error) {
 		interestsMap[interest] = true
 	}
 
-	search := &Search{
+	core = &SearchSystem{
 		sql:       db,
 		interests: interestsMap,
 	}
 
-	return search, nil
+	return nil
 
 }
 
@@ -63,7 +70,6 @@ type Params struct {
 }
 
 func query[T any](
-	s *Search,
 	params Params,
 	callback func(rows *sql.Rows) (*T, error),
 ) (*T, error) {
@@ -73,7 +79,7 @@ func query[T any](
 	defer cancel() // Cancel the context after the query execution
 
 	// Execute the query with the provided arguments
-	rows, err := s.sql.QueryContext(ctx, params.Query, params.Args...)
+	rows, err := core.sql.QueryContext(ctx, params.Query, params.Args...)
 	if err != nil {
 		// Return the SQL error if it is any other error
 		return nil, err
@@ -88,6 +94,6 @@ func query[T any](
 
 }
 
-func (s *Search) Close() error {
-	return s.sql.Close()
+func Close() error {
+	return core.sql.Close()
 }

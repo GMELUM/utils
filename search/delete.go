@@ -5,10 +5,16 @@ import (
 	"time"
 )
 
-// DeleteUserByID removes a record from the search table by user ID
-func (s *Search) DeleteUserByID(
+// Delete removes a record from the search table by user ID
+func Delete(
 	UserID uint64,
 ) error {
+
+	// Check if core is initialized
+	if core == nil || core.sql == nil {
+		return ErrNotInitialize
+	}
+
 	// Construct the SQL query for deletion
 	query := "DELETE FROM search WHERE user = ?"
 
@@ -17,7 +23,7 @@ func (s *Search) DeleteUserByID(
 	defer cancel()
 
 	// Execute the SQL deletion
-	_, err := s.sql.ExecContext(ctx, query, UserID)
+	_, err := core.sql.ExecContext(ctx, query, UserID)
 	if err != nil {
 		return err
 	}

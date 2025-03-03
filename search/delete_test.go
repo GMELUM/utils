@@ -6,7 +6,7 @@ import (
 
 // Test case for deleting a user record by ID
 func TestDeleteUserByID(t *testing.T) {
-	search, err := New(Config{
+	err := New(Config{
 		Reset: true,
 		Interests: []string{
 			"music", "travel", "sport", "art", "cooking", "movies", "games",
@@ -18,22 +18,22 @@ func TestDeleteUserByID(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Error during initialization: %v", err)
 	}
-	defer search.Close()
+	defer Close()
 
 	// Create a record to be deleted
-	err = search.Create(1, "en", 18, 30, 1, 25, 1, "music", "travel", "art")
+	err = Create(1, "en", 18, 30, 1, 25, 1, "music", "travel", "art")
 	if err != nil {
 		t.Fatalf("Error during record creation: %v", err)
 	}
 
 	// Delete the record by user ID
-	err = search.DeleteUserByID(1)
+	err = Delete(1)
 	if err != nil {
 		t.Fatalf("Error during record deletion: %v", err)
 	}
 
 	// Verify the record no longer exists
-	result, err := search.Search("en", 18, 30, 1, 1, 25)
+	result, err := Search("en", 18, 30, 1, 1, 25)
 	if err != nil {
 		t.Fatalf("Error during search: %v", err)
 	}
@@ -44,7 +44,7 @@ func TestDeleteUserByID(t *testing.T) {
 
 // Benchmark for the DeleteUserByID function
 func BenchmarkDeleteUserByID(b *testing.B) {
-	search, err := New(Config{
+	err := New(Config{
 		Reset: true,
 		Interests: []string{
 			"music", "travel", "sport", "art", "cooking", "movies", "games",
@@ -56,10 +56,10 @@ func BenchmarkDeleteUserByID(b *testing.B) {
 	if err != nil {
 		b.Fatalf("Error during initialization: %v", err)
 	}
-	defer search.Close()
+	defer Close()
 
 	for i := 0; i < 1000; i++ { // Insert 50,000 records
-		err = search.Create(uint64(i), "en", 18, 30, 1, 25, 1, "music", "travel", "art")
+		err = Create(uint64(i), "en", 18, 30, 1, 25, 1, "music", "travel", "art")
 		if err != nil {
 			b.Fatalf("Error during record creation: %v", err)
 		}
@@ -69,7 +69,7 @@ func BenchmarkDeleteUserByID(b *testing.B) {
 
 	// Benchmark the delete function
 	for i := 0; i < b.N; i++ {
-		err := search.DeleteUserByID(uint64(i % 1000)) // Use record IDs in range of inserted records
+		err := Delete(uint64(i % 1000)) // Use record IDs in range of inserted records
 		if err != nil {
 			b.Fatalf("Error during delete: %v", err)
 		}
