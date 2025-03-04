@@ -1,1 +1,1 @@
-# TOn Wallet
+# TON Wallet
