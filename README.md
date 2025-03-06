@@ -6,6 +6,16 @@ Welcome to my personal collection of Go packages, designed to streamline backend
 
 This repository contains a set of utility packages that I have developed and refined over time, aimed at facilitating the backend development process. Each package is built with a focus on simplicity, efficiency, and ease of integration into various web-oriented projects.
 
+## Getting Started
+
+To start using these packages, install the repository using `go get`:
+
+```bash
+go get github.com/gmelum/utils
+```
+
+For detailed usage instructions and examples, please visit the specific package directories in the repository.
+
 ## List of Utilities
 
 Here is a list of available packages and their purposes:
@@ -20,22 +30,4 @@ Here is a list of available packages and their purposes:
 
 - [**Package `mysql`**](https://github.com/GMELUM/utils/tree/main/mysql): Universal wrapper over MySQL for implementing caching and handling query timeouts.
 
-## Getting Started
-
-To start using these packages, install the repository using `go get`:
-
-```bash
-go get github.com/gmelum/utils
-```
-
-Then import the desired package into your Go project:
-
-```go
-import (
-    "github.com/gmelum/utils/{package}" // replace {package} with the specific package you want to use
-)
-```
-
-## Additional Information
-
-For detailed usage instructions and examples, please visit the specific package directories in the repository.
+- [**Package `query`**](https://github.com/GMELUM/utils/tree/main/query/sqlite): Lightweight queue with data storage in file or in memory
