@@ -30,8 +30,8 @@ Here is a list of available packages and their purposes:
 
 - [**Package `mysql`**](https://github.com/GMELUM/utils/tree/main/mysql): Universal wrapper over MySQL for implementing caching and handling query timeouts.
 
-- [**Package `query`**](https://github.com/GMELUM/utils/tree/main/query/sqlite): Lightweight SQLite queue with data storage in file or in memory
+- [**Package `query`**](https://github.com/GMELUM/utils/tree/main/query/sqlite): Lightweight queue with data storage in SQLite
 
-- [**Package `query`**](https://github.com/GMELUM/utils/tree/main/query/mysql): Lightweight MySQL queue with data storage in file or in memory
+- [**Package `query`**](https://github.com/GMELUM/utils/tree/main/query/mysql): Lightweight queue with data storage in MySQL
 
-- [**Package `query`**](https://github.com/GMELUM/utils/tree/main/query/redis): Lightweight Redis queue with data storage in file or in memory
+- [**Package `query`**](https://github.com/GMELUM/utils/tree/main/query/redis): Lightweight queue with data storage in Redis
