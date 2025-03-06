@@ -22,6 +22,9 @@ Here is a list of available packages and their purposes:
 - [**Package `callback`**](https://github.com/GMELUM/utils/tree/main/callback)
   - Implementation of an internal callback system for dispatching notifications.
 
+- [**Package `mysql`**](https://github.com/GMELUM/utils/tree/main/mysql)
+  - Universal wrapper over MySQL for implementing caching and handling query timeouts.
+
 ## Getting Started
 
 To start using these packages, install the repository using `go get`:
