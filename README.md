@@ -10,20 +10,15 @@ This repository contains a set of utility packages that I have developed and ref
 
 Here is a list of available packages and their purposes:
 
-- [**Package `tonsub`**](https://github.com/GMELUM/utils/tree/main/tonsub)
-  - Provides features to subscribe to TON blockchain transactions, process Jetton, NFT, and TON transfer events.
+- [**Package `tonsub`**](https://github.com/GMELUM/utils/tree/main/tonsub): Provides features to subscribe to TON blockchain transactions, process Jetton, NFT, and TON transfer events.
 
-- [**Package `wallet`**](https://github.com/GMELUM/utils/tree/main/wallet)
-  - A package for managing transactions on the TON blockchain.
+- [**Package `wallet`**](https://github.com/GMELUM/utils/tree/main/wallet): A package for managing transactions on the TON blockchain.
 
-- [**Package `search`**](https://github.com/GMELUM/utils/tree/main/wallet)
-  - Implementation for searching interlocutors with mandatory parameters and interests.
+- [**Package `search`**](https://github.com/GMELUM/utils/tree/main/wallet): Implementation for searching interlocutors with mandatory parameters and interests.
 
-- [**Package `callback`**](https://github.com/GMELUM/utils/tree/main/callback)
-  - Implementation of an internal callback system for dispatching notifications.
+- [**Package `callback`**](https://github.com/GMELUM/utils/tree/main/callback): Implementation of an internal callback system for dispatching notifications.
 
-- [**Package `mysql`**](https://github.com/GMELUM/utils/tree/main/mysql)
-  - Universal wrapper over MySQL for implementing caching and handling query timeouts.
+- [**Package `mysql`**](https://github.com/GMELUM/utils/tree/main/mysql): Universal wrapper over MySQL for implementing caching and handling query timeouts.
 
 ## Getting Started
 
