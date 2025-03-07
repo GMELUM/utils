@@ -33,7 +33,8 @@ type NFT struct {
 	Address           string `json:"nft_address"`        // Address of the NFT
 	OwnerAddress      string `json:"owner_address"`      // Address of the current owner of the NFT
 	CollectionAddress string `json:"collection_address"` // Address of the collection to which the NFT belongs
-	Message           string `json:"message"`            // Optional message extracted from the transaction
+	Meta              string `json:"meta"`
+	Message           string `json:"message"` // Optional message extracted from the transaction
 }
 
 // NFTBody processes a tlb.InternalMessage and extracts NFT transaction data,
@@ -47,8 +48,23 @@ func (s *Sub) NFTBody(ti *tlb.InternalMessage) (*RootNFT, error) {
 	// Retrieve NFT data, which contains various information related to the NFT.
 	nftData, err := item.GetNFTData(s.Context)
 	if err != nil {
-		// Panic if there's an error fetching NFT data (may need error handling mechanism).
-		panic(err)
+		return nil, err
+	}
+
+	var meta string
+	if nftData.CollectionAddress.Type() != address.NoneAddress {
+		// get info about our nft's collection
+		collection := nft.NewCollectionClient(s.Api, nftData.CollectionAddress)
+
+		// get full nft's content url using collection method that will merge base url with nft's data
+		nftContent, err := collection.GetNFTContent(s.Context, nftData.Index, nftData.Content)
+		if err != nil {
+			return nil, err
+		}
+
+		if off, ok := nftContent.(*nft.ContentOffchain); ok {
+			meta = off.URI
+		}
 	}
 
 	// Initialize payload parsing to extract additional transaction details.
@@ -94,6 +110,7 @@ func (s *Sub) NFTBody(ti *tlb.InternalMessage) (*RootNFT, error) {
 			Address:           nftAddr.String(),
 			OwnerAddress:      nftData.OwnerAddress.String(),
 			CollectionAddress: nftData.CollectionAddress.String(),
+			Meta:              meta,
 			Message:           text,
 		},
 	}, nil
