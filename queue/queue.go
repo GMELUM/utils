@@ -163,10 +163,6 @@ func (c *Queue) process() {
 					if isBroke {
 						fmt.Println("Processing broke, sleeping for 30 seconds")
 						time.Sleep(30 * time.Second)
-					} else {
-						if err := c.Delete(item.ID); err != nil {
-							fmt.Println("Error deleting item:", err)
-						}
 					}
 				}
 			} else {
