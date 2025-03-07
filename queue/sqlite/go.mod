@@ -1,4 +1,4 @@
-module github.com/gmelum/utils/query/sqlite
+module github.com/gmelum/utils/queue/sqlite
 
 go 1.23.2
 
